@@ -5,79 +5,49 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.wipro.bank.assessment.App;
 import com.wipro.bank.entity.Account;
 
-public class AppTest {
 
+public class AppTest{
+	
+	App app=null;
+	
 	@Before
-	public void setUp() throws Exception {
+	public void  before(){
+				
+		app=new App();
+	}
+	
+	 @After
+	public void after(){
+		 app=null;
 		
 	}
-
-	@Test
-	public void testGetAccountDetailsByID1() {
-		App.accounts.add(new Account (1,"test1",100.00));		
-		App.accounts.add(new Account (3,"test2",200.00));
-		App.accounts.add(new Account (4,"test3",300.00));
-		App.accounts.add(new Account (5,"test4",400.00));	
-		assertNull(new App().getAccountDetailsByID(10));
-	}
+	 @Test
+	 public void getAccountDetailsByIDTest(){
+		 
+		 assertEquals(App.accounts.get(0),app.getAccountDetailsByID(1));
+		 assertEquals(App.accounts.get(1),app.getAccountDetailsByID(2));
+		 assertNull(app.getAccountDetailsByID(4));
+		 assertNotNull(app.getAccountDetailsByID(2));
+		 
+		 
+		 
+	 }
+	 @Test
+	 public void getAccountDetailsByBalanceTest(){
+		 List<Account> acc=new ArrayList<Account>();
+		acc.add(App.accounts.get(0));
+		acc.add(App.accounts.get(1));
+		 assertEquals(acc,app.getAccountDetailsByBalance(100.00));
+		 assertEquals(acc.size(),app.getAccountDetailsByBalance(100.00).size());
+		 assertNotNull(app.getAccountDetailsByBalance(100.00));
+		 
+	 }
 	
-	@Test
-	public void testGetAccountDetailsByID2() {
-		App.accounts.add(new Account (1,"test1",100.00));		
-		App.accounts.add(new Account (3,"test2",200.00));
-		App.accounts.add(new Account (4,"test3",300.00));
-		App.accounts.add(new Account (5,"test4",400.00));	
-		Account acc=new App().getAccountDetailsByID(2);
-		assertNotNull(acc);
-		assertEquals("patel",acc.getUserName());
-	}
-	
-	@Test
-	public void getAccountDetailsByBalance1(){
-		App.accounts.add(new Account (1,"acc1",101.11));		
-		App.accounts.add(new Account (3,"acc3",303.33));
-		App.accounts.add(new Account (4,"acc4",404.43));
-		App.accounts.add(new Account (5,"acc5",505.55));	
-		assertNull("When No account found:",new App().getAccountDetailsByBalance(909.01));
-	}
-	
-	@Test
-	public void getAccountDetailsByBalance2(){
-		App.accounts.add(new Account (1,"acc1",101.11));		
-		App.accounts.add(new Account (3,"acc3",303.33));
-		App.accounts.add(new Account (4,"acc4",404.43));
-		App.accounts.add(new Account (5,"acc5",505.55));	
-		List<Account> actualAccounts=new App().getAccountDetailsByBalance(0.0);
-		assertNotNull(actualAccounts);
-		assertEquals(App.accounts.size(),actualAccounts.size());
-	}
-	
-	@Test
-	public void getAccountDetailsByBalance3(){
-		App.accounts.add(new Account (1,"acc1",101.11));		
-		App.accounts.add(new Account (3,"acc3",303.33));
-		App.accounts.add(new Account (4,"acc4",404.43));
-		App.accounts.add(new Account (5,"acc5",505.55));	
-		double amount=201.01;
-		
-		List<Account> checkActualAccounts=new ArrayList<Account>();		
-		for(Account account:App.accounts){			
-			if(account.getBalance()>=amount){				
-				checkActualAccounts.add(account);
-			}
-		}
-		if(checkActualAccounts.size()==0){
-			checkActualAccounts=null;
-		}
-		
-		List<Account> actualAccounts=new App().getAccountDetailsByBalance(amount);
-		assertNotNull(actualAccounts);
-		assertEquals(checkActualAccounts.size(),actualAccounts.size());
-	}
-
 }
